@@ -6,7 +6,10 @@ export type PlanStep = {
   action: string;
   label: string;
   endpoint: string;
-  payload: Record<string, unknown>;
+  // Read steps (e.g. diff) carry `params`; write steps carry `payload`.
+  // The body we POST is whichever is present.
+  params?: Record<string, unknown>;
+  payload?: Record<string, unknown>;
   bulk?: boolean;
 };
 
@@ -28,6 +31,53 @@ export type ParseResponse =
   | { status: "analyze"; query: string; intent: string[] }
   | { status: "error"; message: string };
 
+/** Detailed single-API comparison returned by /api/diff/api (plain JSON). */
+export type ApiDiffSide = { displayName: string; revision: string; path: string };
+export type ApiDiff = {
+  api_id?: string;
+  src?: ApiDiffSide | null;
+  dest?: ApiDiffSide | null;
+  src_revision?: string;
+  dest_revision?: string;
+  ops_added?: number;
+  ops_changed?: number;
+  backends_count?: number;
+  policy?: { differs?: boolean };
+  operations?: {
+    only_in_src: unknown[];
+    only_in_dest: unknown[];
+    common: unknown[];
+  };
+  // instance diff shape (no api_id)
+  summary?: Record<string, number>;
+  error?: string;
+};
+
+/** summary payload on a promote SSE `status:"done"` event. */
+export type PromoteSummary = {
+  api_id?: string;
+  api_name?: string;
+  api_path?: string;
+  src?: string;
+  dest?: string;
+  revision?: string | number;
+};
+
+/** summary payload on create/onboard SSE `status:"done"` events. Fields
+ * vary by flow, so this is intentionally loose. */
+export type OnboardSummary = {
+  api_id?: string;
+  backend_id?: string;
+  operations?: number;
+  operations_updated?: number;
+  product_id?: string;
+  product_name?: string;
+  subscription_id?: string;
+  subscription_name?: string;
+  revision?: string | number;
+  keys?: { primaryKey?: string; secondaryKey?: string } | Record<string, unknown>;
+};
+
 export async function parseQuery(query: string, history: ChatMessage[]): Promise<ParseResponse> {
   const res = await fetch(`${BACKEND_URL}/api/assistant/parse`, {
     method: "POST",
@@ -37,6 +87,18 @@ export async function parseQuery(query: string, history: ChatMessage[]): Promise
   return res.json();
 }
 
+/** Returns the list of configured environments the backend knows about,
+ * or an empty list if the backend is unreachable. */
+export async function fetchHealth(): Promise<string[]> {
+  try {
+    const res = await fetch(`${BACKEND_URL}/api/health`);
+    const json = await res.json();
+    return Array.isArray(json?.environments) ? json.environments : [];
+  } catch {
+    return [];
+  }
+}
+
 /** Runs a single plan step. Backend either returns plain JSON or an SSE
  * event-stream (progress events) — callers get every event via onEvent
  * and the promise resolves once the stream/request finishes. */
@@ -44,10 +106,11 @@ export async function runStep(
   step: PlanStep,
   onEvent: (event: unknown) => void
 ): Promise<void> {
+  const body = step.params ?? step.payload ?? {};
   const res = await fetch(`${BACKEND_URL}${step.endpoint}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(step.payload),
+    body: JSON.stringify(body),
   });
 
   const contentType = res.headers.get("content-type") || "";
