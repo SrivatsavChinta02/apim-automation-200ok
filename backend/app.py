@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from flask import Flask, jsonify, Response, request, current_app, g
 from flask_cors import CORS
 from config import (
-    APIM_INSTANCES, ALLOWED_EXTENSION_ID, FLASK_PORT,
+    APIM_INSTANCES, ALLOWED_EXTENSION_ID, ALLOWED_WEB_ORIGINS, FLASK_PORT,
     BUILTIN_APIS, BUILTIN_PRODUCTS, DEFAULT_ENV, API_VER,
     BACKEND_API_VER,
 )
@@ -56,8 +56,11 @@ def create_app(testing=False):
     from utils.request_context import install as install_request_context
     install_request_context(app)
 
-    origin = f"chrome-extension://{ALLOWED_EXTENSION_ID}" if ALLOWED_EXTENSION_ID else "*"
-    CORS(app, origins=[origin])
+    if ALLOWED_EXTENSION_ID:
+        origins = [f"chrome-extension://{ALLOWED_EXTENSION_ID}", *ALLOWED_WEB_ORIGINS]
+    else:
+        origins = "*"
+    CORS(app, origins=origins, supports_credentials=False)
 
     _auth_cache = {}
 

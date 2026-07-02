@@ -52,6 +52,12 @@ FLASK_PORT = int(os.environ.get("FLASK_PORT", "5050"))
 ALLOWED_EXTENSION_ID = os.environ.get("ALLOWED_EXTENSION_ID", "")
 DEFAULT_ENV = os.environ.get("DEFAULT_ENV", "dev")
 
+# Comma-separated list of extra origins allowed to call the API (e.g. the
+# Next.js web UI). Defaults to the Next.js dev server.
+ALLOWED_WEB_ORIGINS = [
+    o.strip() for o in os.environ.get("ALLOWED_WEB_ORIGINS", "http://localhost:3000").split(",") if o.strip()
+]
+
 # Used by api_creator.py for JWT policy
 AZURE_TENANT_ID = _TENANT_ID
 
