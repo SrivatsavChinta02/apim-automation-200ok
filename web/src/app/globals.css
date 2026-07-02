@@ -1,26 +1,162 @@
 @import "tailwindcss";
 
+/* Design tokens ported from the apim_console.html prototype. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #3457d5;
+  --primary-dark: #22369e;
+  --primary-container: #e1e7ff;
+  --success: #17835a;
+  --success-container: #dbf3e7;
+  --warning: #a8630f;
+  --warning-container: #fbeacb;
+  --error: #b8382b;
+  --error-container: #fbe6e3;
+  --surface: #fafafb;
+  --surface-dim: #f0f1f5;
+  --surface-high: #ffffff;
+  --ink-900: #191b24;
+  --ink-600: #585c6e;
+  --ink-400: #8a8da0;
+  --line: #e4e5ec;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Inter, system-ui, sans-serif;
+  background: var(--surface);
+  color: var(--ink-900);
+}
+
+.font-display {
+  font-family: var(--font-manrope), Manrope, sans-serif;
+}
+.font-mono {
+  font-family: var(--font-mono), "JetBrains Mono", monospace;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d4d5e0;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b9bbcb;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.msg-in {
+  animation: msgIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes msgIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+.ripple:active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+  animation: rippleFx 0.5s ease-out;
+}
+@keyframes rippleFx {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.elev-1 {
+  box-shadow: 0 1px 2px rgba(20, 20, 40, 0.04), 0 1px 1px rgba(20, 20, 40, 0.03);
+}
+.elev-2 {
+  box-shadow: 0 2px 8px rgba(20, 20, 40, 0.07), 0 1px 2px rgba(20, 20, 40, 0.05);
+}
+.elev-3 {
+  box-shadow: 0 8px 24px rgba(20, 20, 40, 0.1), 0 2px 6px rgba(20, 20, 40, 0.06);
+}
+
+.node-dot {
+  transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.node-active {
+  background: var(--primary) !important;
+  box-shadow: 0 0 0 5px var(--primary-container);
+}
+.pulse-dot {
+  animation: pulseDot 1.4s ease-in-out infinite;
+}
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.6;
+  }
+}
+
+.chip {
+  transition: all 0.18s ease;
+}
+.chip:hover {
+  background: var(--primary-container);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.env-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.composer-input:focus {
+  box-shadow: 0 0 0 3px var(--primary-container);
+}
+
+.diff-highlight {
+  background: var(--warning-container);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
