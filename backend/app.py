@@ -1170,17 +1170,21 @@ def create_app(testing=False):
         status, keys = client.post(f"subscriptions/{sub_id}/listSecrets")
         return jsonify({"subscription_id": sub_id, "display_name": final_display, "primaryKey": keys.get("primaryKey", ""), "secondaryKey": keys.get("secondaryKey", "")})
 
-    @app.route("/api/diff/instance")
+    @app.route("/api/diff/instance", methods=["GET", "POST"])
     def diff_instance():
         from services.diff_service import instance_diff
-        return jsonify(instance_diff(current_app.get_client(request.args.get("src", "dev")), current_app.get_client(request.args.get("dest", "prod"))))
+        body = request.get_json(silent=True) or {}
+        src = body.get("src") or request.args.get("src", "dev")
+        dest = body.get("dest") or request.args.get("dest", "prod")
+        return jsonify(instance_diff(current_app.get_client(src), current_app.get_client(dest)))
 
-    @app.route("/api/diff/api")
+    @app.route("/api/diff/api", methods=["GET", "POST"])
     def diff_api():
-        api_id = request.args.get("api_id")
+        body = request.get_json(silent=True) or {}
+        api_id = body.get("api_id") or request.args.get("api_id")
         if not api_id: return jsonify({"error": "api_id required"}), 400
-        src_env = request.args.get("src", "dev")
-        dest_env = request.args.get("dest", "prod")
+        src_env = body.get("src") or request.args.get("src", "dev")
+        dest_env = body.get("dest") or request.args.get("dest", "prod")
         from services.diff_service import api_diff
         return jsonify(api_diff(current_app.get_client(src_env), current_app.get_client(dest_env), api_id, src_env, dest_env))
 

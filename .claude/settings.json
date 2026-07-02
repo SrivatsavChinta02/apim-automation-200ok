@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(python -c \"import flask, flask_cors, requests, msal, dotenv, anthropic; print\\('all present'\\)\")"
+    ]
+  }
+}
