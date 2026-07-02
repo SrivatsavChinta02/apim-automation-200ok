@@ -1,0 +1,18 @@
+<policies>
+  <inbound>
+    <base />
+    CONTENT_VALIDATION_PLACEHOLDER
+    BACKEND_OVERRIDE_PLACEHOLDER
+    <rewrite-uri template="REWRITE_URI_PLACEHOLDER" copy-unmatched-params="false" />
+    APPID_CHECK_PLACEHOLDER
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+  </outbound>
+  <on-error>
+    <base />
+  </on-error>
+</policies>

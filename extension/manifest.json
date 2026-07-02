@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "APIM Admin",
+  "version": "1.0.4",
+  "description": "Azure API Management admin tools",
+  "permissions": ["sidePanel", "activeTab", "clipboardWrite"],
+  "host_permissions": ["http://localhost:5050/*"],
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "action": {
+    "default_title": "Open APIM Admin"
+  },
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}

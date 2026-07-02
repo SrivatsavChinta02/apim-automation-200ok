@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APIM Admin</title>
+
+  <!-- Bootstrap 5.3.3 (local) -->
+  <link rel="stylesheet" href="vendor/bootstrap.min.css" />
+  <!-- Bootstrap Icons 1.11.3 (local) -->
+  <link rel="stylesheet" href="vendor/bootstrap-icons.min.css" />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="pages/assistant.css" />
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="apim-header">
+    <div class="header-left">
+      <button id="bookmarks-trigger" class="bookmarks-trigger" title="Bookmarks">
+        <i class="bi bi-bookmark-star"></i>
+      </button>
+      <div id="bookmarks-panel" class="bookmarks-panel"></div>
+      <span class="header-title">APIM Admin</span>
+    </div>
+    <span>
+      <span id="connection-dot" class="connection-dot error" title="Checking..."></span>
+    </span>
+  </header>
+
+  <!-- App body: nav rail + content -->
+  <div class="app-body">
+
+    <!-- Left nav rail -->
+    <nav class="nav-rail" id="nav-rail">
+      <div class="nav-item" data-section="assistant" title="Assistant (Ctrl+1)">
+        <i class="bi bi-stars"></i><span class="nav-label">Assistant</span>
+      </div>
+      <div class="nav-item" data-section="explorer" title="Explorer (Ctrl+2)">
+        <i class="bi bi-list-ul"></i><span class="nav-label">Explorer</span>
+      </div>
+      <div class="nav-item" data-section="create-api" title="Create API (Ctrl+3)">
+        <i class="bi bi-plus-circle"></i><span class="nav-label">Create</span>
+      </div>
+      <div class="nav-item" data-section="products" title="Products (Ctrl+4)">
+        <i class="bi bi-box"></i><span class="nav-label">Products</span>
+      </div>
+      <div class="nav-item" data-section="diff" title="Diff (Ctrl+5)">
+        <i class="bi bi-arrow-left-right"></i><span class="nav-label">Diff</span>
+      </div>
+      <div class="nav-item" data-section="promote" title="Promote (Ctrl+6)">
+        <i class="bi bi-send"></i><span class="nav-label">Promote</span>
+      </div>
+      <div class="nav-item" data-section="onboard" title="Onboard (Ctrl+7)">
+        <i class="bi bi-person-plus"></i><span class="nav-label">Onboard</span>
+      </div>
+      <div class="nav-item" data-section="spec-generator" title="Spec Generator (Ctrl+9)">
+        <i class="bi bi-file-earmark-code"></i><span class="nav-label">Spec Gen</span>
+      </div>
+      <!-- Spacer pushes settings to bottom -->
+      <div class="nav-spacer"></div>
+
+      <div class="nav-item" data-section="settings" title="Settings (Ctrl+8)">
+        <i class="bi bi-gear"></i><span class="nav-label">Settings</span>
+      </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="content-area" id="page-content">
+      <!-- Rendered by Router -->
+    </main>
+
+  </div>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-2" style="z-index:9999;"></div>
+
+  <!-- Bootstrap JS (local) -->
+  <script src="vendor/bootstrap.bundle.min.js"></script>
+
+  <!-- Core -->
+  <script src="api.js"></script>
+  <script src="app.js"></script>
+
+  <!-- Components -->
+  <script src="components/utils.js"></script>
+  <script src="components/bookmarks-dropdown.js"></script>
+  <script src="components/env-tabs.js"></script>
+  <script src="components/toast.js"></script>
+  <script src="components/progress-bar.js"></script>
+  <script src="components/search-input.js"></script>
+  <script src="components/diff-viewer.js"></script>
+
+  <!-- Pages -->
+  <script src="pages/assistant.js"></script>
+  <script src="pages/explorer.js"></script>
+  <script src="pages/create-api.js"></script>
+  <script src="pages/products.js"></script>
+  <script src="pages/diff.js"></script>
+  <script src="pages/promote.js"></script>
+  <script src="pages/onboard.js"></script>
+  <script src="pages/settings.js"></script>
+  <script src="pages/spec-generator.js"></script>
+
+</body>
+</html>
